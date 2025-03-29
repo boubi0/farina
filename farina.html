@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study with Farina! 📚🐾</title>
+    <style>
+        .todo-container {
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 20px auto;
+            max-width: 400px;
+            border: 2px dashed #4FC3F7;
+        }
+        .todo-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        #todoInput {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 2px solid #4FC3F7;
+        }
+        .todo-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid #E1F5FE;
+        }
+        .todo-item.completed {
+            opacity: 0.7;
+        }
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+        }
+        .todo-checkbox {
+            margin-right: 10px;
+        }
+        .delete-todo {
+            margin-left: auto;
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        .priority-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            margin-right: 5px;
+        }
+        .priority {
+            color: #FF6B6B;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #E6F7FF;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(#B3E5FC 10%, transparent 10%);
+            background-size: 20px 20px;
+        }
+        .pet-container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 4px solid #4FC3F7;
+        }
+        h1 {
+            color: #0288D1;
+            text-shadow: 2px 2px 0 #B3E5FC;
+        }
+        .pet {
+            width: 220px;
+            height: 220px;
+            background-color: #4FC3F7;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            position: relative;
+            animation: bounce 2s infinite;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.1);
+        }
+        .eyes {
+            position: absolute;
+            top: 70px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+        .eye {
+            width: 35px;
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            position: relative;
+            box-shadow: inset -3px -3px 5px rgba(0,0,0,0.1);
+        }
+        .pupil {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 50%;
+            position: absolute;
+            top: 14px;
+            left: 8px;
+            animation: blink 4s infinite;
+        }
+        .mouth {
+            width: 70px;
+            height: 25px;
+            background-color: #0288D1;
+            border-radius: 0 0 40px 40px;
+            position: absolute;
+            bottom: 60px;
+            left: 75px;
+            transition: all 0.3s;
+        }
+        .blush {
+            width: 30px;
+            height: 15px;
+            background-color: #81D4FA;
+            border-radius: 50%;
+            position: absolute;
+            top: 100px;
+            opacity: 0;
+        }
+        .blush.left { left: 50px; }
+        .blush.right { right: 50px; }
+        .lesson-box {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 400px;
+            border: 2px dashed #4FC3F7;
+        }
+        input, textarea {
+            padding: 10px;
+            width: 70%;
+            border-radius: 20px;
+            border: 2px solid #4FC3F7;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        textarea {
+            height: 60px;
+            border-radius: 15px;
+            resize: none;
+        }
+        button {
+            background-color: #4FC3F7;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.3s;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 0 #0288D1;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #0288D1;
+        }
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0288D1;
+        }
+        #response {
+            font-size: 18px;
+            margin: 15px 0;
+            min-height: 60px;
+            color: #01579B;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            background-color: #E1F5FE;
+            padding: 15px;
+            border-radius: 15px;
+        }
+        .stat-box {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            min-width: 100px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0288D1;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #E1F5FE;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #4FC3F7;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes blink {
+            0%, 45%, 55%, 100% { height: 18px; top: 14px; }
+            48%, 52% { height: 2px; top: 25px; }
+        }
+        .happy .mouth {
+            border-radius: 20px;
+            height: 15px;
+            bottom: 65px;
+        }
+        .happy .blush {
+            opacity: 1;
+        }
+        .thinking {
+            animation: tilt 2s infinite;
+        }
+        .thinking .mouth {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            bottom: 55px;
+            left: 95px;
+        }
+        @keyframes tilt {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(8deg); }
+            75% { transform: rotate(-8deg); }
+        }
+        .sleeping {
+            animation: none;
+        }
+        .sleeping .eye {
+            height: 5px;
+            top: 85px;
+        }
+        .sleeping .pupil {
+            display: none;
+        }
+        .sleeping .mouth {
+            width: 40px;
+            height: 5px;
+            bottom: 70px;
+            left: 90px;
+            border-radius: 5px;
+        }
+        .sleeping .blush {
+            opacity: 0;
+        }
+        .zzz {
+            position: absolute;
+            font-size: 24px;
+            color: #4FC3F7;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: zzz 2s infinite;
+        }
+        @keyframes zzz {
+            0%, 100% { opacity: 0; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+        }
+        .goal-message {
+            font-weight: bold;
+            color: #0288D1;
+            margin: 10px 0;
+        }
+        /* NEW: Flashcard Styles */
+        .flashcard-container {
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            margin: 0 auto;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flashcard-inner {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            font-size: 18px;
+            text-align: center;
+        }
+        .flashcard-front {
+            background-color: #FFFFFF;
+            border: 3px solid #4FC3F7;
+            color: #0288D1;
+        }
+        .flashcard-back {
+            background-color: #4FC3F7;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .flashcard-controls {
+            margin-top: 15px;
+        }
+        .flashcard-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            background-color: #E1F5FE;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .flashcard-item {
+            background-color: white;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+        .flashcard-item:hover {
+            background-color: #B3E5FC;
+        }
+        /* ADD THIS NEW STYLE FOR DELETE BUTTONS */
+        .delete-card {
+            background-color: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            margin-left: 10px;
+            cursor: pointer;
+            float: right;
+        }
+        .delete-card:hover {
+            background-color: #D32F2F;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="pet-container">
+        <h1>Study with Farina! 📚🐾</h1>
+        <p>Your ultra-cute study buddy with REAL flashcards!</p>
+        
+        <div class="pet" id="farina">
+            <div class="eyes">
+                <div class="eye"><div class="pupil"></div></div>
+                <div class="eye"><div class="pupil"></div></div>
+            </div>
+            <div class="mouth"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
+            <div class="zzz">Zzz...</div>
+        </div>
+        
+        <div class="goal-message" id="goalMessage">
+            🎯 Today's Goal: <strong>10 HOURS OF STUDYING!</strong> Farina believes in you! 💪
+        </div>
+        <div class="todo-container">
+            <h3>📝 Farina's To-Do List</h3>
+            <div class="todo-input">
+                <input type="text" id="todoInput" placeholder="Add a task (e.g., 'Review biology')">
+                <button onclick="addTodo()">Add</button>
+            </div>
+            <div class="todo-list" id="todoList">
+                <!-- Tasks will appear here -->
+            </div>
+        </div>
+    
+        
+        <!-- NEW: Flashcard Section -->
+        <div class="flashcard-container">
+            <h3>📚 Create Study Flashcards</h3>
+            <input type="text" id="cardQuestion" placeholder="Question (e.g., 'What is photosynthesis?')">
+            <textarea id="cardAnswer" placeholder="Answer (e.g., 'The process plants use to convert sunlight into energy.')"></textarea>
+            <button onclick="createFlashcard()">Create Flashcard</button>
+            
+            <div id="flashcardDisplay" style="display: none;">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front" id="frontSide">
+                            Click to flip!
+                        </div>
+                        <div class="flashcard-back" id="backSide">
+                            The answer will appear here!
+                        </div>
+                    </div>
+                </div>
+                <div class="flashcard-controls">
+                    <button onclick="prevCard()">⬅️ Previous</button>
+                    <button onclick="nextCard()">Next ➡️</button>
+                </div>
+            </div>
+            
+            <div class="flashcard-list" id="flashcardList">
+                No flashcards yet. Create one above!
+            </div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div>Flashcards</div>
+                <div id="cardCount">0</div>
+            </div>
+            <div class="stat-box">
+                <div>Study Time</div>
+                <div class="timer-display" id="timer">00:00:00</div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <p>Study progress: <span id="progressText">0%</span> of 10-hour goal</p>
+        
+        <button onclick="startStudyTimer()">Start Study Timer</button>
+        <button onclick="pauseStudyTimer()">Pause Timer</button>
+        <button onclick="resetStudyTimer()">Reset Timer</button>
+        
+        <div style="margin-top: 20px;">
+            <button onclick="farinaAction('happy')">😊 Happy Farina</button>
+            <button onclick="farinaAction('think')">🤔 Thinking Farina</button>
+            <button onclick="farinaAction('sleep')">😴 Sleepy Farina</button>
+            <button onclick="farinaAction('reset')">🔄 Reset Farina</button>
+        </div>
+    </div>
+
+    <script>
+        // Farina's data
+        const lessons = [];
+        let studySeconds = 0;
+        let timerInterval;
+        let isTimerRunning = false;
+        const GOAL_HOURS = 10;
+        const farina = document.getElementById('farina');
+        const response = document.getElementById('response');
+        const cardCount = document.getElementById('cardCount');
+        const timerDisplay = document.getElementById('timer');
+        const progressBar = document.getElementById('progress');
+        const progressText = document.getElementById('progressText');
+        const goalMessage = document.getElementById('goalMessage');
+        
+        // NEW: Flashcard data
+        let flashcards = [];
+        let currentCardIndex = 0;
+        const flashcardDisplay = document.getElementById('flashcardDisplay');
+        const flashcardList = document.getElementById('flashcardList');
+        const frontSide = document.getElementById('frontSide');
+        const backSide = document.getElementById('backSide');
+        
+        // Motivational messages
+        const motivationalMessages = [
+            "You got this! Farina believes in you! 🐾",
+            "Keep going! Every minute counts! ⏳",
+            "10 hours? Easy for a superstar like you! 🌟",
+            "Stay focused! Farina is cheering you on! 📚",
+            "Imagine how proud you'll feel after 10 hours! 💪",
+            "Don't stop now! You're crushing it! 🔥"
+        ];
+        
+        // NEW: Flashcard functions
+        function createFlashcard() {
+            const question = document.getElementById('cardQuestion').value.trim();
+            const answer = document.getElementById('cardAnswer').value.trim();
+            
+            if (question && answer) {
+                flashcards.push({
+                    question: question,
+                    answer: answer,
+                    mastered: false
+                });
+                
+                cardCount.textContent = flashcards.length;
+                updateFlashcardList();
+                document.getElementById('cardQuestion').value = '';
+                document.getElementById('cardAnswer').value = '';
+                
+                // Show first card if this is the first one
+                if (flashcards.length === 1) {
+                    showCard(0);
+                    flashcardDisplay.style.display = 'block';
+                }
+                
+                response.innerHTML = `Farina says: "New flashcard created! 🎉"`;
+                farina.classList.add('happy');
+                setTimeout(() => farina.classList.remove('happy'), 2000);
+            } else {
+                response.innerHTML = 'Please enter both a question and answer!';
+                farina.classList.add('thinking');
+                setTimeout(() => farina.classList.remove('thinking'), 1000);
+            }
+        }
+        
+        function showCard(index) {
+            if (flashcards.length > 0 && index >= 0 && index < flashcards.length) {
+                currentCardIndex = index;
+                frontSide.textContent = flashcards[index].question;
+                backSide.textContent = flashcards[index].answer;
+                document.getElementById('flashcard').classList.remove('flipped');
+            }
+        }
+        
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+        }
+        
+        function nextCard() {
+            if (currentCardIndex < flashcards.length - 1) {
+                showCard(currentCardIndex + 1);
+            } else {
+                response.innerHTML = "You've reached the end! Farina is proud! 🎉";
+                farina.classList.add('happy');
+                setTimeout(() => farina.classList.remove('happy'), 2000);
+            }
+        }
+        
+        function prevCard() {
+            if (currentCardIndex > 0) {
+                showCard(currentCardIndex - 1);
+            }
+        }
+        
+        function updateFlashcardList() {
+            if (flashcards.length === 0) {
+                flashcardList.innerHTML = 'No flashcards yet. Create one above!';
+                return;
+            }
+            
+            flashcardList.innerHTML = '';
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'flashcard-item';
+                cardElement.textContent = `Card ${index + 1}: ${card.question.substring(0, 30)}${card.question.length > 30 ? '...' : ''}`;
+                cardElement.onclick = () => {
+                    showCard(index);
+                    flashcardDisplay.style.display = 'block';
+                };
+                flashcardList.appendChild(cardElement);
+            });
+        }
+        
+        // Study timer functions
+        function startStudyTimer() {
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                timerInterval = setInterval(() => {
+                    studySeconds++;
+                    updateTimerDisplay();
+                    
+                    // Show motivational messages every 5 minutes
+                    if (studySeconds % 300 === 0) {
+                        const randomMessage = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+                        response.innerHTML = randomMessage;
+                        farina.classList.add('happy');
+                        setTimeout(() => farina.classList.remove('happy'), 2000);
+                    }
+                    
+                    // Update progress towards 10-hour goal
+                    const progressPercent = Math.min(Math.floor((studySeconds / (GOAL_HOURS * 3600)) * 100), 100);
+                    progressBar.style.width = `${progressPercent}%`;
+                    progressText.textContent = `${progressPercent}%`;
+                    
+                    // Special message when goal is reached
+                    if (studySeconds === GOAL_HOURS * 3600) {
+                        response.innerHTML = "🎉 CONGRATS! YOU HIT 10 HOURS! Farina is so proud! 🎉";
+                        farina.classList.add('happy');
+                    }
+                }, 1000);
+                response.innerHTML = "Farina is cheering for your study session! 📚💪";
+                farina.classList.add('happy');
+                setTimeout(() => farina.classList.remove('happy'), 1000);
+            }
+        }
+        
+        function pauseStudyTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            response.innerHTML = "Study paused. Farina is taking a break too! ☕";
+            farina.classList.add('thinking');
+            setTimeout(() => farina.classList.remove('thinking'), 1000);
+        }
+        
+        function resetStudyTimer() {
+            isTimerRunning = false;
+            clearInterval(timerInterval);
+            studySeconds = 0;
+            updateTimerDisplay();
+            progressBar.style.width = "0%";
+            progressText.textContent = "0%";
+            response.innerHTML = "Timer reset! Ready for a fresh start?";
+        }
+        
+        function updateTimerDisplay() {
+            const hours = Math.floor(studySeconds / 3600);
+            const minutes = Math.floor((studySeconds % 3600) / 60);
+            const seconds = studySeconds % 60;
+            timerDisplay.textContent = 
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+        
+        // Farina actions
+        function farinaAction(action) {
+            farina.className = 'pet'; // Reset classes
+            switch(action) {
+                case 'happy':
+                    farina.classList.add('happy');
+                    response.innerHTML = 'Farina is overjoyed! 🥰';
+                    break;
+                case 'think':
+                    farina.classList.add('thinking');
+                    response.innerHTML = 'Farina is pondering deeply... 🤔';
+                    break;
+                case 'sleep':
+                    farina.classList.add('sleeping');
+                    document.querySelector('.zzz').style.display = 'block';
+                    response.innerHTML = 'Shhh... Farina is napping. 😴💤';
+                    break;
+                case 'reset':
+                    lessons.length = 0;
+                    cardCount.textContent = '0';
+                    progressBar.style.width = '0%';
+                    progressText.textContent = '0%';
+                    response.innerHTML = 'Farina forgot everything! Ready to learn anew! 🐶';
+                    farina.classList.add('happy');
+                    setTimeout(() => farina.classList.remove('happy'), 1000);
+                    break;
+            }
+        }
+        // [Previous JavaScript remains the same until the updateFlashcardList function]
+
+        // UPDATED FUNCTION WITH DELETE BUTTONS
+        function updateFlashcardList() {
+            if (flashcards.length === 0) {
+                flashcardList.innerHTML = 'No flashcards yet. Create one above!';
+                return;
+            }
+            
+            flashcardList.innerHTML = '';
+            flashcards.forEach((card, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'flashcard-item';
+                
+                // Add delete button to each card
+                cardElement.innerHTML = `
+                    <span>Card ${index + 1}: ${card.question.substring(0, 30)}${card.question.length > 30 ? '...' : ''}</span>
+                    <button class="delete-card" onclick="deleteCard(${index})">×</button>
+                    <div style="clear:both;"></div>
+                `;
+                
+                cardElement.onclick = (e) => {
+                    // Only show card if not clicking the delete button
+                    if (!e.target.classList.contains('delete-card')) {
+                        showCard(index);
+                        flashcardDisplay.style.display = 'block';
+                    }
+                };
+                flashcardList.appendChild(cardElement);
+            });
+        }
+
+        // NEW FUNCTION TO DELETE CARDS
+        function deleteCard(index) {
+            if (confirm("Delete this flashcard? Farina will be sad to see it go...")) {
+                flashcards.splice(index, 1);
+                cardCount.textContent = flashcards.length;
+                
+                // Update display
+                if (flashcards.length === 0) {
+                    flashcardDisplay.style.display = 'none';
+                } else if (currentCardIndex >= flashcards.length) {
+                    showCard(flashcards.length - 1);
+                }
+                
+                updateFlashcardList();
+                
+                // Farina's reaction
+                response.innerHTML = "Farina whimpered as you deleted a card... but she understands! 🐾";
+                farina.classList.add('thinking');
+                setTimeout(() => farina.classList.remove('thinking'), 2000);
+            }
+        }
+
+        // [Rest of the JavaScript remains the same]
+                // NEW: To-Do List Functionality
+                let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        
+        function renderTodos() {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            
+            if (todos.length === 0) {
+                todoList.innerHTML = '<p>No tasks yet. Add one above!</p>';
+                return;
+            }
+            
+            todos.forEach((todo, index) => {
+                const todoItem = document.createElement('div');
+                todoItem.className = `todo-item ${todo.completed ? 'completed' : ''}`;
+                todoItem.innerHTML = `
+                    <button class="priority-btn" onclick="togglePriority(${index})">${todo.priority ? '🔥' : '○'}</button>
+                    <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''} onchange="toggleTodo(${index})">
+                    <span class="todo-text">${todo.text}</span>
+                    <button class="delete-todo" onclick="deleteTodo(${index})">×</button>
+                `;
+                todoList.appendChild(todoItem);
+            });
+        }
+        
+        function addTodo() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+            
+            if (text) {
+                todos.push({
+                    text: text,
+                    completed: false,
+                    priority: false
+                });
+                localStorage.setItem('todos', JSON.stringify(todos));
+                input.value = '';
+                renderTodos();
+                
+                // Farina's reaction
+                response.innerHTML = "Farina wagged her tail! New task added! 🐾";
+                farina.classList.add('happy');
+                setTimeout(() => farina.classList.remove('happy'), 2000);
+            }
+        }
+        
+        function toggleTodo(index) {
+            todos[index].completed = !todos[index].completed;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+            
+            if (todos[index].completed) {
+                response.innerHTML = "Farina jumps! Task completed! 🎉";
+                farina.classList.add('happy');
+                setTimeout(() => farina.classList.remove('happy'), 2000);
+            }
+        }
+        
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+            
+            // Farina's reaction
+            response.innerHTML = "Farina pouted... but she knows you got this!";
+            farina.classList.add('thinking');
+            setTimeout(() => farina.classList.remove('thinking'), 2000);
+        }
+        
+        function togglePriority(index) {
+            todos[index].priority = !todos[index].priority;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            renderTodos();
+        }
+        
+        // Initialize on load
+        renderTodos();
+
+
+    </script>
+</body>
+</html>
